@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Salary Calculation</h1>
+    
+    <label for="baselineSalary">Baseline Salary (USD):</label>
+    <input type="number" id="baselineSalary" value="6000">
+    
+    <label for="yenSalary">Yen Salary (JPY):</label>
+    <input type="number" id="yenSalary" value="300000">
+    
+    <label for="exchangeRate">Exchange Rate (JPY to USD):</label>
+    <input type="number" step="0.01" id="exchangeRate" value="145">
+    
+    <label for="overtimeHours">Overtime Hours:</label>
+    <input type="number" id="overtimeHours" value="10">
+
+    <label>Select Raise Percentage:</label>
+    <input type="radio" id="raise3" name="raisePercentage" value="3">
+    <label for="raise3">3%</label>
+    <input type="radio" id="raise5" name="raisePercentage" value="5" checked>
+    <label for="raise5">5%</label>
+    <input type="radio" id="raise10" name="raisePercentage" value="10">
+    <label for="raise10">10%</label>
+    <input type="radio" id="raise15" name="raisePercentage" value="15">
+    <label for="raise15">15%</label>
+    
+    <button onclick="calculateSalary()">Calculate</button>
+    
+    <h2>Results:</h2>
+    <p id="monthlySalary"></p>
+    <p id="yenAndUSD"></p>
+
+    <script>
+        function calculateSalary() {
+            const baselineSalary = parseFloat(document.getElementById('baselineSalary').value);
+            const yenSalary = parseFloat(document.getElementById('yenSalary').value);
+            const exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
+            const overtimeHours = parseFloat(document.getElementById('overtimeHours').value);
+            
+            const raisePercentage = parseFloat(document.querySelector('input[name="raisePercentage"]:checked').value);
+
+            const adjustedBase = baselineSalary * (1 + raisePercentage / 100) + 700;
+
+            const overtimePay = (adjustedBase / 30 / 8) * overtimeHours;
+            const saturdayWorkPay = (adjustedBase / 30) * 4;
+
+            const monthlySalary = adjustedBase + overtimePay + saturdayWorkPay;
+
+            const yenSalaryUSD = yenSalary / exchangeRate;
+            const usdPart = monthlySalary - yenSalaryUSD;
+
+            document.getElementById('monthlySalary').innerText = "Monthly Salary after raise: " + monthlySalary.toFixed(2) + " USD";
+            document.getElementById('yenAndUSD').innerText = "Yen Salary (USD): " + yenSalaryUSD.toFixed(2) + " USD | Additional USD: " + usdPart.toFixed(2) + " USD";
+        }
+    </script>
+</body>
+</html>
