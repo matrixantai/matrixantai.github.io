@@ -121,11 +121,12 @@
       <input type="number" step="0.1" id="bonusMonths" value="1.8" />
     </div>
 
-     <div class="form-row" style="flex-direction: column">
+    <div class="form-row" style="flex-direction: column">
       <label>选择周六加班：</label>
       <div class="radio-group">
         <label
-          ><input type="radio" name="saturdayWorkPay" value="1" checked /> 是</label
+          ><input type="radio" name="saturdayWorkPay" value="1" checked />
+          是</label
         >
         <label
           ><input type="radio" name="saturdayWorkPay" value="0" /> 否</label
@@ -156,9 +157,9 @@
 
     <h2>计算结果</h2>
     <p id="monthlySalary"></p>
-    <p id="YenSalary"></p>
-    <p id="USDSalary"></p>
-    <p id="YearSalary"></p>
+    <p id="yenSalaryPart"></p>
+    <p id="usdSalaryPart"></p>
+    <p id="yearSalary"></p>
 
     <script>
       function calculateSalary() {
@@ -179,37 +180,38 @@
           document.querySelector('input[name="raisePercentage"]:checked').value
         );
 
-         const isSaturdayWorkPay = parseFloat(
+        const isSaturdayWorkPay = parseFloat(
           document.querySelector('input[name="saturdayWorkPay"]:checked').value
+        );
+
+        const bonusMonths = parseFloat(
+          document.getElementById("bonusMonths").value
         );
 
         const adjustedBase = baselineSalary * (1 + raisePercentage / 100) + 700;
 
         const overtimePay = (adjustedBase / 30 / 8) * overtimeHours;
 
-        const saturdayWorkPay = isSaturdayWorkPay == 1 ? (adjustedBase / 30) * 4 : 0;
+        const saturdayWorkPay =
+          isSaturdayWorkPay == 1 ? (adjustedBase / 30) * 4 : 0;
 
         const monthlySalary = adjustedBase + overtimePay + saturdayWorkPay;
 
         const yenSalaryUSD = yenSalary / exchangeRate;
         const usdPart = monthlySalary - yenSalaryUSD;
 
-        document.getElementById("monthlySalary").innerText =
-          "加薪后的月薪: " + monthlySalary.toFixed(2) + " USD";
-        document.getElementById("YenSalary").innerText =
-          "日元部分 (USD): " + yenSalaryUSD.toFixed(2) + " USD";
-        document.getElementById("USDSalary").innerText =
-          "USD部分: " + usdPart.toFixed(2) + " USD";
-
-        const bonusMonths = parseFloat(
-          document.getElementById("bonusMonths").value
-        );
         const yearSalary =
           adjustedBase * (12 + bonusMonths) +
-          (adjustedBase / 30) * 4 * 12 +
-          (adjustedBase / 30 / 8) * overtimeHours * 12;
+          saturdayWorkPay * 12 +
+          overtimePay * 12;
 
-        document.getElementById("YearSalary").innerText =
+        document.getElementById("monthlySalary").innerText =
+          "加薪后的月薪: " + monthlySalary.toFixed(2) + " USD";
+        document.getElementById("yenSalaryPart").innerText =
+          "日元部分 (USD): " + yenSalaryUSD.toFixed(2) + " USD";
+        document.getElementById("usdSalaryPart").innerText =
+          "USD部分: " + usdPart.toFixed(2) + " USD";
+        document.getElementById("yearSalary").innerText =
           "合计年薪: " + yearSalary.toFixed(2) + " USD";
       }
     </script>
