@@ -121,6 +121,18 @@
       <input type="number" step="0.1" id="bonusMonths" value="1.8" />
     </div>
 
+     <div class="form-row" style="flex-direction: column">
+      <label>选择周六加班：</label>
+      <div class="radio-group">
+        <label
+          ><input type="radio" name="saturdayWorkPay" value="1" checked /> 是</label
+        >
+        <label
+          ><input type="radio" name="saturdayWorkPay" value="0" /> 否</label
+        >
+      </div>
+    </div>
+
     <div class="form-row" style="flex-direction: column">
       <label>选择涨薪幅度：</label>
       <div class="radio-group">
@@ -167,10 +179,15 @@
           document.querySelector('input[name="raisePercentage"]:checked').value
         );
 
+         const isSaturdayWorkPay = parseFloat(
+          document.querySelector('input[name="saturdayWorkPay"]:checked').value
+        );
+
         const adjustedBase = baselineSalary * (1 + raisePercentage / 100) + 700;
 
         const overtimePay = (adjustedBase / 30 / 8) * overtimeHours;
-        const saturdayWorkPay = (adjustedBase / 30) * 4;
+
+        const saturdayWorkPay = isSaturdayWorkPay == 1 ? (adjustedBase / 30) * 4 : 0;
 
         const monthlySalary = adjustedBase + overtimePay + saturdayWorkPay;
 
@@ -187,38 +204,47 @@
         const bonusMonths = parseFloat(
           document.getElementById("bonusMonths").value
         );
-        const yearSalary = (adjustedBase * (12 + bonusMonths)) + (adjustedBase / 30 * 4 * 12) + (adjustedBase / 30 / 8 * overtimeHours * 12);
+        const yearSalary =
+          adjustedBase * (12 + bonusMonths) +
+          (adjustedBase / 30) * 4 * 12 +
+          (adjustedBase / 30 / 8) * overtimeHours * 12;
 
         document.getElementById("YearSalary").innerText =
           "合计年薪: " + yearSalary.toFixed(2) + " USD";
-
       }
     </script>
 
     <div class="text-left">
-      <h3>加班薪资为标准时薪</h3>
+      <h3>调薪规则</h3>
       <div>
+        <div>涨薪档位3% 5% 10% 15%</div>
+        <div>计算规则：基础薪资*（3%/5%/10%15%）+住房补贴</div>
+        <div>计算示例：6000*1.05+700=7000</div>
+      </div>
+
+      <div>
+        <div>加班薪资为标准时薪<</div>
         <div>加班10小时为例</div>
         <div>计算示例：7000/30/8*10=292</div>
       </div>
-      <div style="height: 8px;"></div>
+      <div style="height: 8px"></div>
       <div>
         <div>周六上班买断</div>
         <div>计算示例：7000/30*4=933</div>
       </div>
-      <div style="height: 8px;"></div>
+      <div style="height: 8px"></div>
 
       <div>
         <div>月收入为</div>
         <div>7000+292+933=8225</div>
       </div>
-      <div style="height: 8px;"></div>
+      <div style="height: 8px"></div>
 
       <div>
         <div>发放形式</div>
         <div>30w日元（2055u）+6170u=8225</div>
       </div>
-      <div style="height: 8px;"></div>
+      <div style="height: 8px"></div>
 
       <div>
         <div>日本公共假期上班算加班</div>
