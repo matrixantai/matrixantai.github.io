@@ -137,6 +137,9 @@
     <div class="form-row" style="flex-direction: column">
       <label>选择涨薪幅度：</label>
       <div class="radio-group">
+         <label
+          ><input type="radio" name="raisePercentage" value="0" /> 0%</label
+        >
         <label
           ><input type="radio" name="raisePercentage" value="3" /> 3%</label
         >
@@ -189,7 +192,7 @@
         );
 
         const adjustedBase = baselineSalary * (1 + raisePercentage / 100) + 700;
-
+        
         const overtimePay = (adjustedBase / 30 / 8) * overtimeHours;
 
         const saturdayWorkPay =
